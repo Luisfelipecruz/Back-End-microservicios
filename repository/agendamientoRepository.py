@@ -77,6 +77,18 @@ def buscar_reservas_Semana_Materia(ID_MAT: int, db: Session):
 
 def crear_reserva(request: agendamientoModel.Agendamiento, db: Session):
 
+    start_range = date.today() + timedelta(weeks=-1)
+    end_range = date.today() + timedelta(weeks=1)
+    reservas_Semana_Curso = db.query(agendamientoModel.Agendamiento).filter(
+            and_((agendamientoModel.Agendamiento.idHorMatGrp == request.idHorMatGrp),
+                 (agendamientoModel.Agendamiento.idUsuario == request.idUsuario),
+                 (agendamientoModel.Agendamiento.fecHorReg.between(start_range, end_range)))
+    ).all()
+
+    if len(reservas_Semana_Curso) > 0 and bool(request.idAgend):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                            detail=f"Ya ha reservado previamente para esa clase en ese dia")
+
     nuevo_reserva = agendamientoModel.Agendamiento(idHorMatGrp=request.idHorMatGrp,
                                                    idUsuario=request.idUsuario,
                                                    Asistira=request.Asistira,
@@ -88,18 +100,31 @@ def crear_reserva(request: agendamientoModel.Agendamiento, db: Session):
     return nuevo_reserva
 
 
-def modificar_reserva(_id: int, request: agendamientoModel.Agendamiento, db: Session):
+def modificar_reserva(request: agendamientoModel.Agendamiento, db: Session):
+    start_range = date.today() + timedelta(weeks=-1)
+    end_range = date.today() + timedelta(weeks=1)
+    reservas_Semana_Curso = db.query(agendamientoModel.Agendamiento).filter(
+            and_((agendamientoModel.Agendamiento.idAgend == request.idAgend),
+                 (agendamientoModel.Agendamiento.idHorMatGrp == request.idHorMatGrp),
+                 (agendamientoModel.Agendamiento.idUsuario == request.idUsuario),
+                 (agendamientoModel.Agendamiento.fecHorReg.between(start_range, end_range)),
+                 (agendamientoModel.Agendamiento.Asistira == request.Asistira))
+    ).all()
+
+    if len(reservas_Semana_Curso) > 0:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                            detail=f"Ya ha reservado previamente para esa clase en ese dia")
+
     reserva_actualizado = db.query(agendamientoModel.Agendamiento).filter(
-            agendamientoModel.Agendamiento.idAgend == _id).first()
+            agendamientoModel.Agendamiento.idAgend == request.idAgend).first()
     if not reserva_actualizado:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"La reserva con id {_id} no esta disponible")
+                            detail=f"La reserva con id {request.idAgend} no esta disponible")
 
     reserva_actualizado.idAgend = request.idAgend
     reserva_actualizado.idHorMatGrp = request.idHorMatGrp
     reserva_actualizado.idUsuario = request.idUsuario
     reserva_actualizado.Asistira = request.Asistira
-    reserva_actualizado.fecHorReg = request.fecHorReg
 
     db.commit()
     db.refresh(reserva_actualizado)

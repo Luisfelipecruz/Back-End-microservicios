@@ -49,5 +49,5 @@ async def crear_reserva(request: agendamientoSchema.Agendamiento, db: Session = 
 
 
 @router.put('/', status_code=status.HTTP_202_ACCEPTED, response_model=agendamientoSchema.Agendamiento)
-async def actualizar_reserva(idAgend: int, request: agendamientoSchema.Agendamiento, db: Session = Depends(get_db)):
-    return agendamientoRepository.modificar_reserva(idAgend, request, db)
+async def actualizar_reserva(request: agendamientoSchema.Agendamiento, db: Session = Depends(get_db)):
+    return agendamientoRepository.modificar_reserva(request, db)
