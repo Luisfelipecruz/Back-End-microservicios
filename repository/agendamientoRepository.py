@@ -2,7 +2,7 @@ from datetime import timedelta, date, datetime
 
 from fastapi import HTTPException, status
 from sqlalchemy import Integer, Unicode, DateTime, String, and_, text, column
-from schemas import usuarioSchema
+from schemas import usuarioSchema, materiaSchema
 from models import agendamientoModel
 from sqlalchemy.orm import Session
 
@@ -50,7 +50,7 @@ def bucar_reserva_semana_usuarios(request: usuarioSchema.identificadorUsuario, d
 
     agendamientoModel.Agendamiento.fecHorReg.between(start_range, end_range)
     stmt = text("SELECT Agendamiento.idAgend AS idAgend, Materia.nombre AS nombre, "
-                "MateriaGrupo.Grupo AS Grupo, MateriaGrupo.Matriculados AS Matriculados, "
+                "MateriaGrupo.Grupo AS Grupo, HorarioMateriaGrupo.DiaSemana AS DiaSemana, "
                 "HorarioMateriaGrupo.Horario AS Horario, HorarioMateriaGrupo.Salon AS Salon, "
                 "HorarioMateriaGrupo.Edificio AS Edificio, HorarioMateriaGrupo.Profesor AS Profesor "
                 "FROM Agendamiento JOIN Usuario ON Usuario.idUsuario = Agendamiento.idUsuario "
@@ -76,13 +76,15 @@ def bucar_reserva_semana_usuarios(request: usuarioSchema.identificadorUsuario, d
     return reservasSemanaMateria
 
 
-def buscar_reservas_Semana_Materia(ID_MAT: int, db: Session):
+def buscar_reservas_Semana_Materia(request: materiaSchema.Materia, db: Session):
+    ID_MAT = request.idMat
     start_range = date.today() + timedelta(weeks=-1)
     end_range = date.today() + timedelta(weeks=1)
 
     agendamientoModel.Agendamiento.fecHorReg.between(start_range, end_range)
     stmt = text("SELECT Agendamiento.idAgend AS idAgend, Usuario.primNomUsr AS primNomUsr, "
-                "Usuario.segNomUsr AS segNomUsr, Usuario.primApeUsr AS primApeUsr, "
+                "Usuario.segNomUsr AS segNomUsr, Usuario.primApeUsr AS primApeUsr,"
+                "HorarioMateriaGrupo.DiaSemana AS DiaSemana, "
                 "HorarioMateriaGrupo.Horario AS Horario, HorarioMateriaGrupo.Salon AS Salon, "
                 "HorarioMateriaGrupo.Edificio AS Edificio, HorarioMateriaGrupo.Profesor AS Profesor "
                 "FROM Agendamiento JOIN Usuario ON Usuario.idUsuario = Agendamiento.idUsuario "
@@ -95,8 +97,8 @@ def buscar_reservas_Semana_Materia(ID_MAT: int, db: Session):
                 "AND Agendamiento.Asistira = 1 "). \
         bindparams(ID_MAT=ID_MAT, start_range=start_range, end_range=end_range). \
         columns(column('idAgend', Integer), column('primNomUsr', Unicode), column('segNomUsr', Unicode),
-                column('primApeUsr', Unicode), column('Horario', Unicode), column('Salon', Unicode),
-                column('Edificio', Unicode), column('Profesor', Unicode))
+                column('primApeUsr', Unicode), column('DiaSemana', Unicode), column('Horario', Unicode),
+                column('Salon', Unicode), column('Edificio', Unicode), column('Profesor', Unicode))
 
     result = db.execute(stmt)
 

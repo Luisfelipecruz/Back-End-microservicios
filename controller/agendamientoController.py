@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 from database import get_db
 from repository import agendamientoRepository
-from schemas import agendamientoSchema, usuarioSchema
+from schemas import agendamientoSchema, usuarioSchema, materiaSchema
 
 router = APIRouter(
 
@@ -37,10 +37,10 @@ async def buscar_reservas_Semana_Usuario(request: usuarioSchema.identificadorUsu
     return agendamientoRepository.bucar_reserva_semana_usuarios(request, db)
 
 
-@router.get('/ReservasSemanaMateria', status_code=status.HTTP_200_OK,
+@router.post('/ReservasSemanaMateria', status_code=status.HTTP_200_OK,
             response_model=List[agendamientoSchema.AgendamientoSemanaMateria])
-async def buscar_reservas_Semana_Materia(idMat: int, db: Session = Depends(get_db)):
-    return agendamientoRepository.buscar_reservas_Semana_Materia(idMat, db)
+async def buscar_reservas_Semana_Materia(request: materiaSchema.Materia, db: Session = Depends(get_db)):
+    return agendamientoRepository.buscar_reservas_Semana_Materia(request, db)
 
 
 @router.post('/', status_code=status.HTTP_201_CREATED)

@@ -19,6 +19,7 @@ class AgendamientoSemanaMateria(BaseModel):
     primNomUsr: Optional[str] = None
     segNomUsr: Optional[str] = None
     primApeUsr: Optional[str] = None
+    DiaSemana: Optional[str] = None
     Horario: Optional[str] = None
     Salon: Optional[str] = None
     Edificio: Optional[str] = None
@@ -35,6 +36,7 @@ class AgendamientoSemanaMateriaUsuario(BaseModel):
     Horario: Optional[str] = None
     Salon: Optional[str] = None
     Edificio: Optional[str] = None
+    DiaSemana: Optional[str] = None
     Profesor: Optional[str] = None
 
     class Config:
