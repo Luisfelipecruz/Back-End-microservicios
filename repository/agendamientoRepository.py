@@ -48,7 +48,6 @@ def bucar_reserva_semana_usuarios(request: usuarioSchema.identificadorUsuario, d
     start_range = date.today() + timedelta(weeks=-1)
     end_range = date.today() + timedelta(weeks=1)
 
-    agendamientoModel.Agendamiento.fecHorReg.between(start_range, end_range)
     stmt = text("SELECT Agendamiento.idAgend AS idAgend, Materia.nombre AS nombre, "
                 "MateriaGrupo.Grupo AS Grupo, HorarioMateriaGrupo.DiaSemana AS DiaSemana, "
                 "HorarioMateriaGrupo.Horario AS Horario, HorarioMateriaGrupo.Salon AS Salon, "
@@ -63,7 +62,7 @@ def bucar_reserva_semana_usuarios(request: usuarioSchema.identificadorUsuario, d
                 "AND Agendamiento.Asistira = 1 "). \
         bindparams(ID_Usuario=ID_Usuario, start_range=start_range, end_range=end_range). \
         columns(column('idAgend', Integer), column('nombre', Unicode), column('Grupo', Unicode),
-                column('Matriculados', Unicode), column('Horario', Unicode), column('Salon', Unicode),
+                column('DiaSemana', Unicode), column('Horario', Unicode), column('Salon', Unicode),
                 column('Edificio', Unicode), column('Profesor', Unicode))
 
     result = db.execute(stmt)

@@ -32,10 +32,10 @@ class AgendamientoSemanaMateriaUsuario(BaseModel):
     idAgend: Optional[int] = None
     nombre: Optional[str] = None
     Grupo: Optional[str] = None
+    DiaSemana: Optional[str] = None
     Horario: Optional[str] = None
     Salon: Optional[str] = None
     Edificio: Optional[str] = None
-    DiaSemana: Optional[str] = None
     Profesor: Optional[str] = None
 
     class Config:

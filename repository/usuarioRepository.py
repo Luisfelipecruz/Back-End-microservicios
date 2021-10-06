@@ -19,14 +19,15 @@ def bucar_usuario(_id: int, db: Session):
     return usuario
 
 
-def bucar_materiaEstudiante_codigo(codigo: int, db: Session):
-    stmt = text("SELECT MateriaEstudiante.idMatEst AS idMatEst, Materia.nombre AS nombre, MateriaGrupo.Grupo AS Grupo "
+def bucar_materiaEstudiante_codigo(request: usuarioSchema.codigoUsuario, db: Session):
+    codigo = request.CodEst
+    stmt = text("SELECT MateriaEstudiante.idMat AS idMat, Materia.nombre AS nombre, MateriaGrupo.Grupo AS Grupo "
                 "FROM Usuario JOIN MateriaEstudiante ON Usuario.idUsuario = MateriaEstudiante.idUsuario "
                 "JOIN MateriaGrupo ON MateriaGrupo.idMatGrp = MateriaEstudiante.idMatGrp "
                 "JOIN Materia ON Materia.idMat = MateriaGrupo.idMat "
                 "WHERE (Usuario.CodEst =:cod)"). \
         bindparams(cod=codigo). \
-        columns(column('idMatEst', Integer), column('nombre', Unicode), column('Grupo', Unicode))
+        columns(column('idMat', Integer), column('nombre', Unicode), column('Grupo', Unicode))
     result = db.execute(stmt)
     usuarioMaterias = [dict(row) for row in result]
 

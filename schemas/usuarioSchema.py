@@ -18,7 +18,7 @@ class Usuario(BaseModel):
 
 
 class MostrarMateriasUsuario(BaseModel):
-    idMatEst: Optional[int] = None
+    idMat: Optional[int] = None
     nombre: Optional[str] = None
     Grupo: Optional[str] = None
 

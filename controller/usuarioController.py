@@ -30,10 +30,10 @@ async def buscar_usuario_por_id(idUsuario: int, db: Session = Depends(get_db)):
     return usuarioRepository.bucar_usuario(idUsuario, db)
 
 
-@router.get('/bucarMateriasEstudiante', status_code=status.HTTP_200_OK,
+@router.post('/bucarMateriasEstudiante', status_code=status.HTTP_200_OK,
             response_model=List[usuarioSchema.MostrarMateriasUsuario])
-async def buscar_materiaEstudiante_por_codigo(codigo: int, db: Session = Depends(get_db)):
-    return usuarioRepository.bucar_materiaEstudiante_codigo(codigo, db)
+async def buscar_materiaEstudiante_por_codigo(request: usuarioSchema.codigoUsuario, db: Session = Depends(get_db)):
+    return usuarioRepository.bucar_materiaEstudiante_codigo(request, db)
 
 
 @router.post('/bucarMateriasEstudianteHorario', status_code=status.HTTP_200_OK)
