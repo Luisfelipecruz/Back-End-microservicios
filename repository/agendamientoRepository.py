@@ -27,7 +27,7 @@ def bucar_reserva_semana_todos(db: Session):
     return reservas_Semana_Curso
 
 
-def bucar_reserva_semana_usuarios(ID_Usuario, db):
+'''def bucar_reserva_semana_usuarios(ID_Usuario, db):
     start_range = date.today() + timedelta(weeks=-1)
     end_range = date.today() + timedelta(weeks=1)
 
@@ -40,7 +40,40 @@ def bucar_reserva_semana_usuarios(ID_Usuario, db):
     if not reservas_Semana_Usuario_Curso:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Para la fecha {date.today()} el usuario no tiene registros")
-    return reservas_Semana_Usuario_Curso
+    return reservas_Semana_Usuario_Curso'''
+
+
+def bucar_reserva_semana_usuarios(request: usuarioSchema.identificadorUsuario, db: Session):
+    ID_Usuario = request.idUsuario
+    start_range = date.today() + timedelta(weeks=-1)
+    end_range = date.today() + timedelta(weeks=1)
+
+    agendamientoModel.Agendamiento.fecHorReg.between(start_range, end_range)
+    stmt = text("SELECT Agendamiento.idAgend AS idAgend, Materia.nombre AS nombre, "
+                "MateriaGrupo.Grupo AS Grupo, MateriaGrupo.Matriculados AS Matriculados, "
+                "HorarioMateriaGrupo.Horario AS Horario, HorarioMateriaGrupo.Salon AS Salon, "
+                "HorarioMateriaGrupo.Edificio AS Edificio, HorarioMateriaGrupo.Profesor AS Profesor "
+                "FROM Agendamiento JOIN Usuario ON Usuario.idUsuario = Agendamiento.idUsuario "
+                "JOIN HorarioMateriaGrupo ON Agendamiento.idHorMatGrp = HorarioMateriaGrupo.idHorMatGrp "
+                "JOIN MateriaGrupo ON MateriaGrupo.idMatGrp = HorarioMateriaGrupo.idMatGrp "
+                "JOIN Materia ON Materia.idMat = MateriaGrupo.idMat "
+                "WHERE Usuario.idUsuario =:ID_Usuario "
+                "AND Agendamiento.fecHorReg >=:start_range "
+                "AND Agendamiento.fecHorReg <=:end_range "
+                "AND Agendamiento.Asistira = 1 "). \
+        bindparams(ID_Usuario=ID_Usuario, start_range=start_range, end_range=end_range). \
+        columns(column('idAgend', Integer), column('nombre', Unicode), column('Grupo', Unicode),
+                column('Matriculados', Unicode), column('Horario', Unicode), column('Salon', Unicode),
+                column('Edificio', Unicode), column('Profesor', Unicode))
+
+    result = db.execute(stmt)
+
+    reservasSemanaMateria = [dict(row) for row in result]
+
+    if not reservasSemanaMateria:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"No hay reservas en esta semana para la materia")
+    return reservasSemanaMateria
 
 
 def buscar_reservas_Semana_Materia(ID_MAT: int, db: Session):

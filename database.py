@@ -1,8 +1,12 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+import os
+from dotenv import load_dotenv
 
-DATABASE_URL = "mysql+mysqlconnector://sql10441847:IA28EVASNP@sql10.freesqldatabase.com:3306/sql10441847"
+load_dotenv()  # take environment variables from .env.
+
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
 engine = create_engine(DATABASE_URL)
 

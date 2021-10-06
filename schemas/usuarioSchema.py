@@ -54,3 +54,10 @@ class codigoUsuario(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class identificadorUsuario(BaseModel):
+    idUsuario: Optional[int] = None
+
+    class Config:
+        orm_mode = True
