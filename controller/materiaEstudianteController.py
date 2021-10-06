@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 from database import get_db
 from repository import materiaEstudianteRepository
-from schemas import materiaEstudianteSchema
+from schemas import materiaEstudianteSchema, usuarioSchema
 
 router = APIRouter(
 
@@ -25,8 +25,8 @@ async def listar_todos(db: Session = Depends(get_db)):
     return materiaEstudianteRepository.listar_materiaEstudiante(db)
 
 
-@router.get('/bucarPorId', status_code=status.HTTP_200_OK, response_model=materiaEstudianteSchema.MateriaEstudiante)
-async def buscar_materiaEstudiante_codigo(codigo: int, db: Session = Depends(get_db)):
-    return materiaEstudianteRepository.bucar_materiaEstudiante_id(codigo, db)
+@router.post('/bucarPorCodigo', status_code=status.HTTP_200_OK, response_model=materiaEstudianteSchema.MateriaEstudiante)
+async def buscar_materiaEstudiante_codigo(request: usuarioSchema.codigoUsuario, db: Session = Depends(get_db)):
+    return materiaEstudianteRepository.bucar_materiaEstudiante_id(request, db)
 
 

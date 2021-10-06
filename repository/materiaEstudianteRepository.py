@@ -1,6 +1,7 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from models import materiaEstudianteModel, usuarioModel
+from schemas import usuarioSchema
 
 
 def listar_materiaEstudiante(db: Session):
@@ -8,7 +9,8 @@ def listar_materiaEstudiante(db: Session):
     return materiaEstudiante
 
 
-def bucar_materiaEstudiante_id(CODIGO: int, db: Session):
+def bucar_materiaEstudiante_id(request: usuarioSchema.codigoUsuario, db: Session):
+    CODIGO = request.CodEst
     materiaEstudiante = db.query(materiaEstudianteModel.MateriaEstudiante).join(usuarioModel.Usuario)\
         .filter(usuarioModel.Usuario.CodEst == CODIGO).first()
     if not materiaEstudiante:
