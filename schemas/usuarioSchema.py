@@ -24,3 +24,12 @@ class MostrarMateriasUsuario(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class singIn(BaseModel):
+    usuario: Optional[str] = None
+    pasword: Optional[str] = None
+    respuesta: Optional[bool] = None
+
+    class Config:
+        orm_mode = True

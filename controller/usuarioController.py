@@ -41,6 +41,11 @@ async def crear_usuario(request: usuarioSchema.Usuario, db: Session = Depends(ge
     return usuarioRepository.crear_usuario(request, db)
 
 
+@router.post('/singIn', status_code=status.HTTP_201_CREATED)
+async def crear_usuario(request: usuarioSchema.singIn, db: Session = Depends(get_db)):
+    return usuarioRepository.loguearUsuario(request, db)
+
+
 @router.put('/', status_code=status.HTTP_202_ACCEPTED, response_model=usuarioSchema.Usuario)
 async def actualizar_usuario(idUsuario: int, request: usuarioSchema.Usuario, db: Session = Depends(get_db)):
     return usuarioRepository.modificar_usuario(idUsuario, request, db)
