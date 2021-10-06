@@ -5,14 +5,12 @@ from database import get_db
 from repository import usuarioRepository
 from schemas import usuarioSchema
 
-
 router = APIRouter(
 
         prefix="/usuarios",
         tags=['Usuarios']
 
 )
-
 
 '''
 Con estas lineas se crea el modelo de Usuarios en la base de datos
@@ -22,14 +20,20 @@ usuarioModel.Base.metadata.create_all(bind=engine)
 '''
 
 
-@router.get("/", response_model=List[usuarioSchema.MostrarUsuario])
+@router.get("/", response_model=List[usuarioSchema.Usuario])
 async def listar_todos(db: Session = Depends(get_db)):
     return usuarioRepository.listar_usuarios(db)
 
 
-@router.get('/{id}', status_code=status.HTTP_200_OK, response_model=usuarioSchema.Usuario)
-async def buscar_usuario_por_id(_id: int, db: Session = Depends(get_db)):
-    return usuarioRepository.bucar_usuario(_id, db)
+@router.get('/buscarUsuario', status_code=status.HTTP_200_OK, response_model=usuarioSchema.Usuario)
+async def buscar_usuario_por_id(idUsuario: int, db: Session = Depends(get_db)):
+    return usuarioRepository.bucar_usuario(idUsuario, db)
+
+
+@router.get('/bucarMateriasEstudiante', status_code=status.HTTP_200_OK,
+            response_model=List[usuarioSchema.MostrarMateriasUsuario])
+async def buscar_materiaEstudiante_por_codigo(codigo: int, db: Session = Depends(get_db)):
+    return usuarioRepository.bucar_materiaEstudiante_codigo(codigo, db)
 
 
 @router.post('/', status_code=status.HTTP_201_CREATED)
@@ -37,11 +41,11 @@ async def crear_usuario(request: usuarioSchema.Usuario, db: Session = Depends(ge
     return usuarioRepository.crear_usuario(request, db)
 
 
-@router.put('/{id}', status_code=status.HTTP_202_ACCEPTED, response_model=usuarioSchema.Usuario)
-async def actualizar_usuario(_id: int, request: usuarioSchema.Usuario, db: Session = Depends(get_db)):
-    return usuarioRepository.modificar_usuario(_id, request, db)
+@router.put('/', status_code=status.HTTP_202_ACCEPTED, response_model=usuarioSchema.Usuario)
+async def actualizar_usuario(idUsuario: int, request: usuarioSchema.Usuario, db: Session = Depends(get_db)):
+    return usuarioRepository.modificar_usuario(idUsuario, request, db)
 
 
-@router.delete('/{id}', status_code=status.HTTP_200_OK)
-async def borrar_usuario(_id: int, db: Session = Depends(get_db)):
-    return usuarioRepository.eliminar_usuario(_id, db)
+@router.delete('/', status_code=status.HTTP_200_OK)
+async def borrar_usuario(idUsuario: int, db: Session = Depends(get_db)):
+    return usuarioRepository.eliminar_usuario(idUsuario, db)

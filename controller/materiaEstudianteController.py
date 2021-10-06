@@ -30,8 +30,3 @@ async def buscar_materiaEstudiante_por_id(_id: int, db: Session = Depends(get_db
     return materiaEstudianteRepository.bucar_materiaEstudiante_id(_id, db)
 
 
-@router.get('/bucarPorCodigo', status_code=status.HTTP_200_OK,  response_model=List[materiaEstudianteSchema.MateriaEstudiante])
-async def buscar_materiaEstudiante_por_codigo(codigo: int, db: Session = Depends(get_db)):
-    return materiaEstudianteRepository.bucar_materiaEstudiante_codigo(codigo, db)
-
-

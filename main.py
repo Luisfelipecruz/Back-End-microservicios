@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from controller import usuarioController, materiaEstudianteController
 from fastapi.middleware.cors import CORSMiddleware
 
-# from .hashing import Hash
+
 app = FastAPI()
 origins = [
         'http://localhost:3000'
