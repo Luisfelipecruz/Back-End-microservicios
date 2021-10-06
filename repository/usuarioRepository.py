@@ -36,7 +36,8 @@ def bucar_materiaEstudiante_codigo(codigo: int, db: Session):
     return usuarioMaterias
 
 
-def bucar_materiaEstudianteHorario_codigo(codigo: int, db: Session):
+def bucar_materiaEstudianteHorario_codigo(request: usuarioSchema.codigoUsuario, db: Session):
+    codigo = request.CodEst
     stmt = text("SELECT MateriaEstudiante.idMatEst AS idMatEst, Materia.nombre AS nombre,"
                 " MateriaGrupo.Grupo AS Grupo, MateriaGrupo.idMatGrp AS idMatGrp "
                 "FROM Usuario JOIN MateriaEstudiante ON Usuario.idUsuario = MateriaEstudiante.idUsuario "

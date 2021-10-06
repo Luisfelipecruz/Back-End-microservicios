@@ -37,8 +37,8 @@ async def buscar_materiaEstudiante_por_codigo(codigo: int, db: Session = Depends
 
 
 @router.get('/bucarMateriasEstudianteHorario', status_code=status.HTTP_200_OK)
-async def buscar_materiaEstudianteHorario_por_codigo(codigo: int, db: Session = Depends(get_db)):
-    return usuarioRepository.bucar_materiaEstudianteHorario_codigo(codigo, db)
+async def buscar_materiaEstudianteHorario_por_codigo(request: usuarioSchema.codigoUsuario, db: Session = Depends(get_db)):
+    return usuarioRepository.bucar_materiaEstudianteHorario_codigo(request, db)
 
 
 @router.post('/', status_code=status.HTTP_201_CREATED)

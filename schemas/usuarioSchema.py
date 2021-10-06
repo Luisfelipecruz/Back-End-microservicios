@@ -33,6 +33,7 @@ class singInCaptura(BaseModel):
     class Config:
         orm_mode = True
 
+
 class singInRespuesta(BaseModel):
     idUsuario: Optional[int] = None
     idRol: Optional[int] = None
@@ -43,6 +44,13 @@ class singInRespuesta(BaseModel):
     SegmApeUsr: Optional[str] = None
     generoUsr: Optional[str] = None
     respuesta: Optional[str] = None
+
+    class Config:
+        orm_mode = True
+
+
+class codigoUsuario(BaseModel):
+    CodEst: Optional[int] = None
 
     class Config:
         orm_mode = True

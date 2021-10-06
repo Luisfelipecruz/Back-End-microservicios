@@ -26,7 +26,7 @@ async def listar_todos(db: Session = Depends(get_db)):
 
 
 @router.get('/bucarPorId', status_code=status.HTTP_200_OK, response_model=materiaEstudianteSchema.MateriaEstudiante)
-async def buscar_materiaEstudiante_por_id(_id: int, db: Session = Depends(get_db)):
-    return materiaEstudianteRepository.bucar_materiaEstudiante_id(_id, db)
+async def buscar_materiaEstudiante_codigo(codigo: int, db: Session = Depends(get_db)):
+    return materiaEstudianteRepository.bucar_materiaEstudiante_id(codigo, db)
 
 
