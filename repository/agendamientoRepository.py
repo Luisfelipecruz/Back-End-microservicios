@@ -119,7 +119,7 @@ def crear_reserva(request: agendamientoModel.Agendamiento, db: Session):
                  (agendamientoModel.Agendamiento.fecHorReg.between(start_range, end_range)))
     ).all()
 
-    if len(reservas_Semana_Curso) > 0 and bool(request.idAgend):
+    if len(reservas_Semana_Curso) > 0:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail=f"Ya ha reservado previamente para esa clase en ese dia")
 
