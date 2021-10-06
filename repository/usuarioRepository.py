@@ -6,7 +6,6 @@ from models import usuarioModel
 from sqlalchemy.sql import column, text
 
 
-
 def listar_usuarios(db: Session):
     usuarios = db.query(usuarioModel.Usuario).all()
     return usuarios
@@ -39,6 +38,7 @@ def bucar_materiaEstudiante_codigo(codigo: int, db: Session):
 
 def crear_usuario(request: usuarioSchema.Usuario, db: Session):
     nuevo_usuarios = usuarioModel.Usuario(idRol=request.idRol,
+                                          CodEst=request.CodEst,
                                           email=request.email,
                                           primNomUsr=request.primNomUsr,
                                           segNomUsr=request.segNomUsr,
@@ -52,13 +52,25 @@ def crear_usuario(request: usuarioSchema.Usuario, db: Session):
     return nuevo_usuarios
 
 
-def loguearUsuario(request: usuarioSchema.singIn, db: Session):
+def loguearUsuario(request: usuarioSchema.singInCaptura, db: Session):
     validacion = db.query(usuarioModel.Usuario).filter(usuarioModel.Usuario.CodEst == request.usuario).first()
+
+    singInRespuesta = usuarioSchema.singInRespuesta(CodEst=request.usuario)
+
     if (request.usuario == request.pasword) and bool(validacion):
-        request.respuesta = True
+        singInRespuesta = usuarioSchema.singInRespuesta(idUsuario=validacion.idUsuario,
+                                                        idRol=validacion.idRol,
+                                                        CodEst=validacion.CodEst,
+                                                        primNomUsr=validacion.primNomUsr,
+                                                        segNomUsr=validacion.segNomUsr,
+                                                        primApeUsr=validacion.primApeUsr,
+                                                        SegmApeUsr=validacion.SegmApeUsr,
+                                                        generoUsr=validacion.generoUsr,
+                                                        respuesta=True
+                                                        )
     else:
-        request.respuesta = False
-    return request
+        singInRespuesta.respuesta = False
+    return singInRespuesta
 
 
 def modificar_usuario(_id: int, request: usuarioSchema.Usuario, db: Session):

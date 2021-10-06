@@ -26,10 +26,23 @@ class MostrarMateriasUsuario(BaseModel):
         orm_mode = True
 
 
-class singIn(BaseModel):
-    usuario: Optional[str] = None
-    pasword: Optional[str] = None
-    respuesta: Optional[bool] = None
+class singInCaptura(BaseModel):
+    usuario: Optional[int] = None
+    pasword: Optional[int] = None
+
+    class Config:
+        orm_mode = True
+
+class singInRespuesta(BaseModel):
+    idUsuario: Optional[int] = None
+    idRol: Optional[int] = None
+    CodEst: Optional[int] = None
+    primNomUsr: Optional[str] = None
+    segNomUsr: Optional[str] = None
+    primApeUsr: Optional[str] = None
+    SegmApeUsr: Optional[str] = None
+    generoUsr: Optional[str] = None
+    respuesta: Optional[str] = None
 
     class Config:
         orm_mode = True

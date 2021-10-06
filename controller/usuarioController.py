@@ -41,8 +41,8 @@ async def crear_usuario(request: usuarioSchema.Usuario, db: Session = Depends(ge
     return usuarioRepository.crear_usuario(request, db)
 
 
-@router.post('/singIn', status_code=status.HTTP_201_CREATED)
-async def crear_usuario(request: usuarioSchema.singIn, db: Session = Depends(get_db)):
+@router.post('/singIn', status_code=status.HTTP_201_CREATED, response_model=usuarioSchema.singInRespuesta)
+async def crear_usuario(request: usuarioSchema.singInCaptura, db: Session = Depends(get_db)):
     return usuarioRepository.loguearUsuario(request, db)
 
 
