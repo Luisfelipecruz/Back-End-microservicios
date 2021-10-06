@@ -36,6 +36,11 @@ async def buscar_materiaEstudiante_por_codigo(codigo: int, db: Session = Depends
     return usuarioRepository.bucar_materiaEstudiante_codigo(codigo, db)
 
 
+@router.get('/bucarMateriasEstudianteHorario', status_code=status.HTTP_200_OK)
+async def buscar_materiaEstudianteHorario_por_codigo(codigo: int, db: Session = Depends(get_db)):
+    return usuarioRepository.bucar_materiaEstudianteHorario_codigo(codigo, db)
+
+
 @router.post('/', status_code=status.HTTP_201_CREATED)
 async def crear_usuario(request: usuarioSchema.Usuario, db: Session = Depends(get_db)):
     return usuarioRepository.crear_usuario(request, db)

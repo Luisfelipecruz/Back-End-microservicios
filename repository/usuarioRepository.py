@@ -1,9 +1,9 @@
 from fastapi import HTTPException, status
 from sqlalchemy import Integer, Unicode, DateTime, String
-from sqlalchemy.orm import Session
 from schemas import usuarioSchema
-from models import usuarioModel
+from models import usuarioModel, horarioMateriaModel
 from sqlalchemy.sql import column, text
+from sqlalchemy.orm import Session
 
 
 def listar_usuarios(db: Session):
@@ -34,6 +34,39 @@ def bucar_materiaEstudiante_codigo(codigo: int, db: Session):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"No hay registro con el codigo de estudiante {codigo} ")
     return usuarioMaterias
+
+
+def bucar_materiaEstudianteHorario_idMatEst(idMatEst: int):
+    stmt2 = db.query(usuarioModel.Usuario).filter(usuarioModel.Usuario.CodEst == idMatEst)
+    usuarioMaterias = [row for row in stmt2]
+    return usuarioMaterias
+
+
+def bucar_materiaEstudianteHorario_codigo(codigo: int, db: Session):
+    stmt = text("SELECT MateriaEstudiante.idMatEst AS idMatEst, Materia.nombre AS nombre,"
+                " MateriaGrupo.Grupo AS Grupo, MateriaGrupo.idMatGrp AS idMatGrp "
+                "FROM Usuario JOIN MateriaEstudiante ON Usuario.idUsuario = MateriaEstudiante.idUsuario "
+                "JOIN MateriaGrupo ON MateriaGrupo.idMatGrp = MateriaEstudiante.idMatGrp "
+                "JOIN Materia ON Materia.idMat = MateriaGrupo.idMat "
+                "WHERE (Usuario.CodEst =:cod)"). \
+        bindparams(cod=codigo). \
+        columns(column('idMatEst', Integer), column('nombre', Unicode),
+                column('Grupo', Unicode), column('idMatGrp', Integer))
+
+    result = db.execute(stmt)
+    usuarioMaterias = [dict(row) for row in result]
+
+    for registro in usuarioMaterias:
+        horario_materias = db.query(horarioMateriaModel.HorarioMateriaGrupo).filter(
+                horarioMateriaModel.HorarioMateriaGrupo.idMatGrp == registro["idMatGrp"])
+        horario_materias_List = [row for row in horario_materias]
+        registro["horario"] = horario_materias_List
+
+    if not usuarioMaterias:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"No hay registro con el codigo de estudiante {codigo} ")
+    return usuarioMaterias
+
 
 
 def crear_usuario(request: usuarioSchema.Usuario, db: Session):
