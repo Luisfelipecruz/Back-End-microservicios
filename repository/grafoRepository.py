@@ -1,5 +1,7 @@
 from fastapi import HTTPException, status
 from schemas import grafoSchema
+from models import edificioModel
+from sqlalchemy.orm import Session
 import heapq
 import sys
 
@@ -304,3 +306,9 @@ def bucar_camino_mas_corto(request: grafoSchema.Grafo):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"No es posible encontrar la ruta mas corta entre los dos puntos dados ")
     return respuesta_list[::-1]
+
+
+def listarALLedificios(db: Session):
+    edificios = db.query(edificioModel.Edificio).all()
+    return edificios
+
