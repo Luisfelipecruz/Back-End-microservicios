@@ -32,7 +32,6 @@ class AgendamientoSemanaMateriaUsuario(BaseModel):
     idAgend: Optional[int] = None
     nombre: Optional[str] = None
     Grupo: Optional[str] = None
-    Matriculados: Optional[str] = None
     Horario: Optional[str] = None
     Salon: Optional[str] = None
     Edificio: Optional[str] = None
