@@ -14,7 +14,7 @@ router = APIRouter(
 )
 
 
-@router.post('/bucarMateriasEstudiante', status_code=status.HTTP_200_OK)
+@router.post('/grafoCaminoMasCorto', status_code=status.HTTP_200_OK)
 async def buscar_materiaEstudiante_por_codigo(request: grafoSchema.Grafo):
     return grafoRepository.bucar_camino_mas_corto(request)
 
