@@ -36,12 +36,6 @@ def bucar_materiaEstudiante_codigo(codigo: int, db: Session):
     return usuarioMaterias
 
 
-def bucar_materiaEstudianteHorario_idMatEst(idMatEst: int):
-    stmt2 = db.query(usuarioModel.Usuario).filter(usuarioModel.Usuario.CodEst == idMatEst)
-    usuarioMaterias = [row for row in stmt2]
-    return usuarioMaterias
-
-
 def bucar_materiaEstudianteHorario_codigo(codigo: int, db: Session):
     stmt = text("SELECT MateriaEstudiante.idMatEst AS idMatEst, Materia.nombre AS nombre,"
                 " MateriaGrupo.Grupo AS Grupo, MateriaGrupo.idMatGrp AS idMatGrp "
@@ -66,7 +60,6 @@ def bucar_materiaEstudianteHorario_codigo(codigo: int, db: Session):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"No hay registro con el codigo de estudiante {codigo} ")
     return usuarioMaterias
-
 
 
 def crear_usuario(request: usuarioSchema.Usuario, db: Session):

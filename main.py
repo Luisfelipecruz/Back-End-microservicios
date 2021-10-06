@@ -1,7 +1,6 @@
 from fastapi import FastAPI
-from controller import usuarioController, materiaEstudianteController
+from controller import usuarioController, materiaEstudianteController, agendamientoController
 from fastapi.middleware.cors import CORSMiddleware
-
 
 app = FastAPI()
 origins = [
@@ -15,6 +14,6 @@ app.add_middleware(
         allow_headers=["*"],
 )
 
-
 app.include_router(usuarioController.router)
 app.include_router(materiaEstudianteController.router)
+app.include_router(agendamientoController.router)
