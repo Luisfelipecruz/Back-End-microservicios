@@ -7,4 +7,4 @@ class Edificio(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     idEdificio = Column(Integer)
     nombreEdificio = Column(String(40))
-    nodoEntrada = Column(Integer)
+    nodoEntrada = Column(String(5))
